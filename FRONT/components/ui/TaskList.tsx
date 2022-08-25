@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo, DragEvent } from "react";
+import { FC, useContext, useMemo, DragEvent, useEffect } from "react";
 import { List, Paper } from "@mui/material";
 
 import { TasksContext } from "../../context/tasks";
@@ -15,6 +15,7 @@ interface Props {
 
 export const TaskList: FC<Props> = ({ status }) => {
   const { tasks, updateTask } = useContext(TasksContext);
+  const { refreshTasks } = useContext(TasksContext);
   const { isDragging, endDragging } = useContext(UIContext);
 
   const tasksByStatus = useMemo(
@@ -34,6 +35,10 @@ export const TaskList: FC<Props> = ({ status }) => {
     updateTask(task);
     endDragging();
   };
+
+  useEffect(() => {
+    refreshTasks();
+  }, []);
 
   return (
     //   TODO: aquí haremos drop

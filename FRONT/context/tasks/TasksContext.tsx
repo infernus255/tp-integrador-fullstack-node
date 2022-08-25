@@ -7,6 +7,7 @@ interface ContextProps {
   // Methods
   addNewTask: (title: string, description: string) => void;
   updateTask: (task: Task, showSnackbar?: boolean) => void;
+  refreshTasks: () => void;
 }
 
 export const TasksContext = createContext({} as ContextProps);

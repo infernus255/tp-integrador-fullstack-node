@@ -11,12 +11,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import { lightTheme, darkTheme } from "../themes";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { signUp, signIn } from "../api";
+import { useRouter } from "next/router";
 
 const LoginPage = () => {
   //true is up, false is in
   const [upOrIn, setUpOrIn] = useState(true);
+
+  const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,9 +27,13 @@ const LoginPage = () => {
     const userName = data.get("userName");
     const password = data.get("password");
     if (upOrIn) {
-      signUp(userName as string, password as string);
+      signUp(userName as string, password as string).then((data) => {
+        if (data) setUpOrIn(false);
+      });
     } else {
-      signIn(userName as string, password as string);
+      signIn(userName as string, password as string).then((data) => {
+        if (data) router.push(`/`);
+      });
     }
   };
 
@@ -90,7 +97,7 @@ const LoginPage = () => {
                 {upOrIn ? (
                   <Button
                     href=""
-                    variant="body2"
+                    variant="text"
                     onClick={() => setUpOrIn(!upOrIn)}
                   >
                     Ya tenes cuenta? Logueate
@@ -98,7 +105,7 @@ const LoginPage = () => {
                 ) : (
                   <Button
                     href=""
-                    variant="body2"
+                    variant="text"
                     onClick={() => setUpOrIn(!upOrIn)}
                   >
                     No tenes cuenta? Registrate

@@ -27,6 +27,8 @@ import { Task, TaskStatus } from "../../interfaces";
 import { dateFunctions } from "../../utils";
 
 import { getTaskById } from "../../api";
+import Cookies from "js-cookie";
+import * as cookie from "cookie";
 
 const validStatus: TaskStatus[] = ["pending", "in_progress", "finished"];
 
@@ -140,10 +142,13 @@ export const TaskPage: FC<Props> = ({ task }) => {
 
 // You should use getServerSideProps when:
 // - Only if you need to pre-render a page whose data must be fetched at request time
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  req,
+}) => {
   const { id } = params as { id: string };
-
-  const task = await getTaskById(id);
+  const parsedCookies = cookie.parse(req.headers.cookie as string);
+  const task = await getTaskById(id, parsedCookies.access_token);
 
   if (!task) {
     return {

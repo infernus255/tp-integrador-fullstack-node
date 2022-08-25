@@ -1,18 +1,11 @@
-import { FC, useEffect, useReducer } from "react";
+import { FC, useEffect, useReducer, useState } from "react";
 
 import { useSnackbar } from "notistack";
 
 import { apiConfig } from "../../api";
 import { Task } from "../../interfaces";
 import { TasksContext, tasksReducer } from ".";
-
-const access_token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGVBQkNEIiwiaWF0IjoxNjYxMzgxMDI1LCJleHAiOjE2NjEzODQ2MjV9.QgSf8l2_ItwDCpvinj90A4YkO37NcoB04Up7wX1Rhn4";
-const config = {
-  headers: {
-    Authorization: `Bearer ${access_token}`,
-  },
-};
+import Cookies from "js-cookie";
 
 export interface TasksState {
   tasks: Task[];
@@ -28,7 +21,14 @@ interface Props {
 
 export const TasksProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(tasksReducer, Tasks_INITIAL_STATE);
+  const access_token = Cookies.get("access_token");
   const { enqueueSnackbar } = useSnackbar();
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
 
   const addNewTask = async (title: string, description: string) => {
     const { data } = await apiConfig.post<Task>(
@@ -70,9 +70,9 @@ export const TasksProvider: FC<Props> = ({ children }) => {
     dispatch({ type: "[Task] Refresh-Data", payload: data });
   };
 
-  useEffect(() => {
-    refreshTasks();
-  }, []);
+  // useEffect(() => {
+  //   refreshTasks();
+  // }, []);
 
   return (
     <TasksContext.Provider
@@ -82,6 +82,7 @@ export const TasksProvider: FC<Props> = ({ children }) => {
         // Methods
         addNewTask,
         updateTask,
+        refreshTasks,
       }}
     >
       {children}
