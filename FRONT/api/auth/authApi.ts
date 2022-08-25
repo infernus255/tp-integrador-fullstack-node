@@ -8,13 +8,22 @@ const config = {
   },
 };
 
-export const signup = async (
+export const signUp = async (username: string, password: string) => {
+  // Fetch data from external API
+  const { data } = await apiConfig.post(
+    `${baseRoute}/signup`,
+    { username, password },
+    config
+  );
+};
+
+export const signIn = async (
   username: string,
   password: string
-): Promise<Task | null> => {
+): Promise<string> => {
   // Fetch data from external API
   const { data } = await apiConfig.post<Task>(
-    `${baseRoute}/signup`,
+    `${baseRoute}/signin`,
     { username, password },
     config
   );

@@ -1,5 +1,5 @@
 {
-  "name": "open-jira",
+  "name": "task-management",
   "private": true,
   "scripts": {
     "dev": "next dev",

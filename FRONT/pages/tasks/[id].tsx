@@ -61,6 +61,7 @@ export const TaskPage: FC<Props> = ({ task }) => {
       ...task,
       status,
       description: inputValue,
+      title: inputValue,
     };
 
     updateTask(updatedTask, true);
