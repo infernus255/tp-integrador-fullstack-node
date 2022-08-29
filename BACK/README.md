@@ -7,6 +7,10 @@ $ yarn install
 ## Running the app
 
 ```bash
+
+# first execute only once
+$ yarn build
+
 # development
 $ yarn start
 
